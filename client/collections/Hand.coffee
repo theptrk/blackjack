@@ -6,6 +6,10 @@ class window.Hand extends Backbone.Collection
 
   hit: ->
     @add(@deck.pop()).last()
+    @trigger 'bust' if @scores() > 21
+    # check player score
+    # if minimum of score === bust BUST
+    #   end game
 
   scores: ->
     # The scores are an array of potential scores.
@@ -18,3 +22,9 @@ class window.Hand extends Backbone.Collection
       score + if card.get 'revealed' then card.get 'value' else 0
     , 0
     if hasAce then [score, score + 10] else [score]
+
+  #stand: ->
+      # ends player turn
+      # reveals dealers hand
+      # checks dealers score
+      # if dealer score > our score else we win
