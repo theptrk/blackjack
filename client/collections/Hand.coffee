@@ -26,3 +26,10 @@ class window.Hand extends Backbone.Collection
       # reveals dealers hand
       # checks dealers score
       # if dealer score > our score else we win
+
+  dealerPlay: ->
+    score = @scores()
+    while score[0] < 17
+      @hit()
+      score = @scores()
+    @trigger 'dealerReturn', @
