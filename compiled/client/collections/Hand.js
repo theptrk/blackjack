@@ -39,6 +39,10 @@
       }
     };
 
+    Hand.prototype.stand = function() {
+      return this.trigger('playerStand');
+    };
+
     return Hand;
 
   })(Backbone.Collection);

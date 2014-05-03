@@ -24,15 +24,59 @@
     AppView.prototype.initialize = function() {
       this.model.get('playerHand').on('bust', (function(_this) {
         return function() {
-          return console.log(_this.$el.find('.player-hand-container').prepend($('<h2>BUSTED</h2>')));
+          return _this.$el.find('.player-hand-container').prepend($('<h2>BUSTED</h2>'));
         };
       })(this));
       this.model.get('playerHand').on('bust', (function(_this) {
         return function() {
-          return console.log(_this.$el.find('.hit-button').attr('disabled', 'disabled'));
+          _this.disButton();
+          return _this.dealerPlays();
+        };
+      })(this));
+      this.model.get('playerHand').on('playerStand', (function(_this) {
+        return function() {
+          _this.disButton();
+          return _this.dealerPlays();
         };
       })(this));
       return this.render();
+    };
+
+    AppView.prototype.disButton = function() {
+      return this.$el.find('button').attr('disabled', 'disabled');
+    };
+
+    AppView.prototype.dealerPlays = function() {
+      var score;
+      console.log(this.model.get('dealerHand').at(0).flip());
+      score = this.model.get('dealerHand').scores();
+      while (score[0] < 17) {
+        this.model.get('dealerHand').hit();
+        score = this.model.get('dealerHand').scores();
+      }
+      return this.checkScores();
+    };
+
+    AppView.prototype.checkScores = function() {
+      var dealerScore, playerScore;
+      playerScore = this.model.get('playerHand').scores();
+      dealerScore = this.model.get('dealerHand').scores();
+      console.log(playerScore);
+      console.log(dealerScore);
+      if (playerScore[0] > 21) {
+        return console.log('player bust');
+      }
+      if (dealerScore[0] > 21) {
+        return console.log('dealer bust');
+      }
+      if (playerScore[0] > dealerScore[0]) {
+        return console.log('player wins');
+      }
+      if (playerScore[0] === dealerScore[0]) {
+        return console.log('push');
+      } else {
+        return console.log('dealer win');
+      }
     };
 
     AppView.prototype.render = function() {
