@@ -2,9 +2,9 @@
 class window.App extends Backbone.Model
 
   initialize: ->
-    @set 'game', game = new Game()
-    # @set 'playerHand', deck.dealPlayer()
-    # @set 'dealerHand', deck.dealDealer()
+    @set 'deck', deck = new Deck()
+    @set 'playerHand', deck.dealPlayer()
+    @set 'dealerHand', deck.dealDealer()
     # @set 'playerBust', false
     # @set 'playerStand', false
     # @get('playerHand').on 'bust', => @set 'playerBust', true

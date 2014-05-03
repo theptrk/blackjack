@@ -43,6 +43,16 @@
       return this.trigger('playerStand');
     };
 
+    Hand.prototype.dealerPlay = function() {
+      var score;
+      score = this.scores();
+      while (score[0] < 17) {
+        this.hit();
+        score = this.scores();
+      }
+      return this.trigger('dealerReturn', this);
+    };
+
     return Hand;
 
   })(Backbone.Collection);

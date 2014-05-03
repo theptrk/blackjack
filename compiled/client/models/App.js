@@ -11,10 +11,8 @@
     }
 
     App.prototype.initialize = function() {
-      var deck;
-      this.set('deck', deck = new Deck());
-      this.set('playerHand', deck.dealPlayer());
-      return this.set('dealerHand', deck.dealDealer());
+      var game;
+      return this.set('game', game = new Game());
     };
 
     App.prototype.event = function() {};

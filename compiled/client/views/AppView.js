@@ -10,83 +10,17 @@
       return AppView.__super__.constructor.apply(this, arguments);
     }
 
-    AppView.prototype.template = _.template('<button class="hit-button">Hit</button> <button class="stand-button">Stand</button> <div class="player-hand-container"></div> <div class="dealer-hand-container"></div>');
-
-    AppView.prototype.events = {
-      "click .hit-button": function() {
-        return this.model.get('playerHand').hit();
-      },
-      "click .stand-button": function() {
-        return this.model.get('playerHand').stand();
-      }
-    };
+    AppView.prototype.template = _.template('<div class="game"></div>');
 
     AppView.prototype.initialize = function() {
-      this.model.get('playerHand').on('bust', (function(_this) {
-        return function() {
-          return _this.$el.find('.player-hand-container').prepend($('<h2>BUSTED</h2>'));
-        };
-      })(this));
-      this.model.get('playerHand').on('bust', (function(_this) {
-        return function() {
-          _this.disButton();
-          return _this.dealerPlays();
-        };
-      })(this));
-      this.model.get('playerHand').on('playerStand', (function(_this) {
-        return function() {
-          _this.disButton();
-          return _this.dealerPlays();
-        };
-      })(this));
       return this.render();
-    };
-
-    AppView.prototype.disButton = function() {
-      return this.$el.find('button').attr('disabled', 'disabled');
-    };
-
-    AppView.prototype.dealerPlays = function() {
-      var score;
-      console.log(this.model.get('dealerHand').at(0).flip());
-      score = this.model.get('dealerHand').scores();
-      while (score[0] < 17) {
-        this.model.get('dealerHand').hit();
-        score = this.model.get('dealerHand').scores();
-      }
-      return this.checkScores();
-    };
-
-    AppView.prototype.checkScores = function() {
-      var dealerScore, playerScore;
-      playerScore = this.model.get('playerHand').scores();
-      dealerScore = this.model.get('dealerHand').scores();
-      console.log(playerScore);
-      console.log(dealerScore);
-      if (playerScore[0] > 21) {
-        return console.log('player bust');
-      }
-      if (dealerScore[0] > 21) {
-        return console.log('dealer bust');
-      }
-      if (playerScore[0] > dealerScore[0]) {
-        return console.log('player wins');
-      }
-      if (playerScore[0] === dealerScore[0]) {
-        return console.log('push');
-      } else {
-        return console.log('dealer win');
-      }
     };
 
     AppView.prototype.render = function() {
       this.$el.children().detach();
       this.$el.html(this.template());
-      this.$('.player-hand-container').html(new HandView({
-        collection: this.model.get('playerHand')
-      }).el);
-      return this.$('.dealer-hand-container').html(new HandView({
-        collection: this.model.get('dealerHand')
+      return this.$('.game').html(new GameView({
+        model: this.model.get('game')
       }).el);
     };
 
