@@ -6,8 +6,8 @@ class window.Hand extends Backbone.Collection
 
   hit: ->
     @add(@deck.pop()).last()
-    @trigger 'bust' if @scores() > 21
-    # check player score
+    @trigger 'bust' if @scores()[0] > 21
+    #@set 'busted', true if @scores() > 21
     # if minimum of score === bust BUST
     #   end game
 
