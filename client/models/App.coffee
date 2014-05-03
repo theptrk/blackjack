@@ -5,6 +5,8 @@ class window.App extends Backbone.Model
     @set 'deck', deck = new Deck()
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
-    @set 'playerBust', false
-    @get('playerHand').on 'bust', => @set 'playerBust', true
+    # @set 'playerBust', false
+    # @set 'playerStand', false
+    # @get('playerHand').on 'bust', => @set 'playerBust', true
+    # @get('playerHand').on 'playerStand', => @set 'playerStand', true
   event: ->
