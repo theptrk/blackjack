@@ -22,6 +22,16 @@
     };
 
     AppView.prototype.initialize = function() {
+      this.model.get('playerHand').on('bust', (function(_this) {
+        return function() {
+          return console.log(_this.$el.find('.player-hand-container').prepend($('<h2>BUSTED</h2>')));
+        };
+      })(this));
+      this.model.get('playerHand').on('bust', (function(_this) {
+        return function() {
+          return console.log(_this.$el.find('.hit-button').attr('disabled', 'disabled'));
+        };
+      })(this));
       return this.render();
     };
 

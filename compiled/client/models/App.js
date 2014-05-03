@@ -15,9 +15,10 @@
       this.set('deck', deck = new Deck());
       this.set('playerHand', deck.dealPlayer());
       this.set('dealerHand', deck.dealDealer());
+      this.set('playerBust', false);
       return this.get('playerHand').on('bust', (function(_this) {
         return function() {
-          return console.log('bust');
+          return _this.set('playerBust', true);
         };
       })(this));
     };

@@ -19,7 +19,7 @@
 
     Hand.prototype.hit = function() {
       this.add(this.deck.pop()).last();
-      if (this.scores() > 21) {
+      if (this.scores()[0] > 21) {
         return this.trigger('bust');
       }
     };
