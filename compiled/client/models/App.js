@@ -17,6 +17,12 @@
 
     App.prototype.event = function() {};
 
+    App.prototype.newGame = function() {
+      var game;
+      this.set('game', game = new Game());
+      return this.trigger('restart', this);
+    };
+
     return App;
 
   })(Backbone.Model);

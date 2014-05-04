@@ -14,10 +14,40 @@
       var deck;
       this.set('deck', deck = new Deck());
       this.set('playerHand', deck.dealPlayer());
-      return this.set('dealerHand', deck.dealDealer());
+      this.set('dealerHand', deck.dealDealer());
+      this.get('dealerHand').on('dealerReturn', (function(_this) {
+        return function() {
+          return _this.checkScores();
+        };
+      })(this));
+      return this.get('playerHand').on('playerStand', (function(_this) {
+        return function() {
+          _this.get('dealerHand').first().flip();
+          return _this.get('dealerHand').dealerPlay();
+        };
+      })(this));
     };
 
     Game.prototype.event = function() {};
+
+    Game.prototype.checkScores = function() {
+      var dealerScore, playerScore;
+      playerScore = this.get('playerHand').scores();
+      dealerScore = this.get('dealerHand').scores();
+      console.log(playerScore);
+      console.log(dealerScore);
+      if (playerScore[0] > 21) {
+        return this.trigger('playerHasBust', this);
+      } else if (dealerScore[0] > 21) {
+        return this.trigger('dealerHasBust', this);
+      } else if (playerScore[0] > dealerScore[0]) {
+        return this.trigger('playerHasWon', this);
+      } else if (playerScore[0] === dealerScore[0]) {
+        return this.trigger('push', this);
+      } else {
+        return this.trigger('dealerHasWon', this);
+      }
+    };
 
     return Game;
 

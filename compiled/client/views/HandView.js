@@ -24,6 +24,8 @@
     };
 
     HandView.prototype.render = function() {
+      console.log('render hand');
+      console.log(this);
       this.$el.children().detach();
       this.$el.html(this.template(this.collection));
       this.$el.append(this.collection.map(function(card) {

@@ -10,10 +10,25 @@
       return AppView.__super__.constructor.apply(this, arguments);
     }
 
-    AppView.prototype.template = _.template('<div class="game"></div>');
+    AppView.prototype.template = _.template('<button class="restart-button">New Game</button> <div class="game"></div>');
+
+    AppView.prototype.events = {
+      "click .restart-button": function() {
+        return this.model.newGame();
+      }
+    };
 
     AppView.prototype.initialize = function() {
+      this.model.on('restart', (function(_this) {
+        return function() {
+          return _this.restartedGame();
+        };
+      })(this));
       return this.render();
+    };
+
+    AppView.prototype.restartedGame = function() {
+      return this.model.on('restartedGame', this.render());
     };
 
     AppView.prototype.render = function() {

@@ -25,7 +25,8 @@
       console.log(this);
       this.model.get('playerHand').on('bust', (function(_this) {
         return function() {
-          return _this.$el.find('.player-hand-container').prepend($('<h2>BUSTED</h2>'));
+          _this.showBusted();
+          return _this.model.checkScores();
         };
       })(this));
       this.model.get('playerHand').on('bust', (function(_this) {
@@ -35,43 +36,54 @@
       })(this));
       this.model.get('playerHand').on('playerStand', (function(_this) {
         return function() {
-          _this.disButton();
-          return _this.dealerPlays();
+          return _this.disButton();
         };
       })(this));
-      this.model.get('dealerHand').on('dealerReturn', (function(_this) {
+      this.model.on('dealerHasBust', (function(_this) {
         return function() {
-          return console.log('dealerH');
+          return _this.showDealerBusted();
+        };
+      })(this));
+      this.model.on('playerHasWon', (function(_this) {
+        return function() {
+          return _this.showPlayerWon();
+        };
+      })(this));
+      this.model.on('push', (function(_this) {
+        return function() {
+          return _this.showPush();
+        };
+      })(this));
+      this.model.on('dealerHasWon', (function(_this) {
+        return function() {
+          return _this.showDealerWon();
         };
       })(this));
       return this.render();
     };
 
+    GameView.prototype.showBusted = function() {
+      return this.$el.find('.player-hand-container').prepend($('<h2>PLAYER BUSTED</h2>'));
+    };
+
+    GameView.prototype.showDealerBusted = function() {
+      return this.$el.find('.player-hand-container').prepend($('<h2>DEALER BUSTED</h2>'));
+    };
+
+    GameView.prototype.showPlayerWon = function() {
+      return this.$el.find('.player-hand-container').prepend($('<h2>PLAYER WON</h2>'));
+    };
+
+    GameView.prototype.showPush = function() {
+      return this.$el.find('.player-hand-container').prepend($('<h2>PUSH</h2>'));
+    };
+
+    GameView.prototype.showDealerWon = function() {
+      return this.$el.find('.player-hand-container').prepend($('<h2>DEALER WON</h2>'));
+    };
+
     GameView.prototype.disButton = function() {
       return this.$el.find('button').attr('disabled', 'disabled');
-    };
-
-    GameView.prototype.dealerPlays = function() {
-      return this.model.get('dealerHand').dealerPlay();
-    };
-
-    GameView.prototype.checkScores = function() {
-      var dealerScore, playerScore;
-      playerScore = this.model.get('playerHand').scores();
-      dealerScore = this.model.get('dealerHand').scores();
-      console.log(playerScore);
-      console.log(dealerScore);
-      if (playerScore[0] > 21) {
-        return console.log('player bust');
-      } else if (dealerScore[0] > 21) {
-        return console.log('dealer bust');
-      } else if (playerScore[0] > dealerScore[0]) {
-        return console.log('player wins');
-      } else if (playerScore[0] === dealerScore[0]) {
-        return console.log('push');
-      } else {
-        return console.log('dealer win');
-      }
     };
 
     GameView.prototype.render = function() {

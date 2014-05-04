@@ -10,3 +10,7 @@ class window.App extends Backbone.Model
     # @get('playerHand').on 'bust', => @set 'playerBust', true
     # @get('playerHand').on 'playerStand', => @set 'playerStand', true
   event: ->
+
+  newGame: ->
+    @set 'game', game = new Game()
+    @trigger 'restart', @
