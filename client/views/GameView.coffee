@@ -12,41 +12,47 @@ class window.GameView extends Backbone.View
 
   initialize: ->
     console.log(@)
-    @model.get('playerHand').on 'bust', => this.$el.find('.player-hand-container').prepend($('<h2>BUSTED</h2>'))
-    @model.get('playerHand').on 'bust', => @disButton() #; @dealerPlays()
-    @model.get('playerHand').on 'playerStand', => @disButton(); @dealerPlays()
-    @model.get('dealerHand').on 'dealerReturn', () =>
-      console.log('dealerH')
-      # @set 'currentSong',
+    @model.get('playerHand').on 'bust', => @showBusted(); @model.checkScores()
+    @model.get('playerHand').on 'bust', => @disButton()
+    @model.get('playerHand').on 'playerStand', => @disButton()
+    # @model.on 'playerHasBust', => @showBusted()
+    @model.on 'dealerHasBust', => @showDealerBusted()
+    @model.on 'playerHasWon', => @showPlayerWon()
+    @model.on 'push', => @showPush()
+    @model.on 'dealerHasWon', => @showDealerWon()
 
 
     @render()
 
+  showBusted: ->
+    @$el.find('.player-hand-container').prepend($('<h2>PLAYER BUSTED</h2>'))
+
+  showDealerBusted: ->
+    @$el.find('.player-hand-container').prepend($('<h2>DEALER BUSTED</h2>'))
+
+  showPlayerWon: ->
+    @$el.find('.player-hand-container').prepend($('<h2>PLAYER WON</h2>'))
+
+  showPush: ->
+    @$el.find('.player-hand-container').prepend($('<h2>PUSH</h2>'))
+
+  showDealerWon: ->
+    @$el.find('.player-hand-container').prepend($('<h2>DEALER WON</h2>'))
+
+
   disButton: ->
-    this.$el.find('button').attr('disabled', 'disabled')
+    @$el.find('button').attr('disabled', 'disabled')
 
-  dealerPlays: ->
-    @model.get('dealerHand').dealerPlay()
-    # console.log(@model.get('dealerHand').at(0).flip())
-    # score = @model.get('dealerHand').scores()
-    # while score[0] < 17
-    #   @model.get('dealerHand').hit()
-    #   score = @model.get('dealerHand').scores()
-
-    # @checkScores()
-    #if score[0] < 17 then @model.get('dealerHand').hit()
-    #@model.get('dealerHand').set('dealerScore', @model.get('dealerHand').scores())
-
-  checkScores: ->
-    playerScore = @model.get('playerHand').scores()
-    dealerScore = @model.get('dealerHand').scores()
-    console.log(playerScore)
-    console.log(dealerScore)
-    if playerScore[0] > 21 then console.log('player bust')
-    else if dealerScore[0] > 21 then console.log('dealer bust')
-    else if playerScore[0] > dealerScore[0] then console.log('player wins')
-    else if playerScore[0] == dealerScore[0] then console.log('push')
-    else console.log('dealer win')
+  # checkScores: ->
+  #   playerScore = @model.get('playerHand').scores()
+  #   dealerScore = @model.get('dealerHand').scores()
+  #   console.log(playerScore)
+  #   console.log(dealerScore)
+  #   if playerScore[0] > 21 then console.log('player bust')
+  #   else if dealerScore[0] > 21 then console.log('dealer bust')
+  #   else if playerScore[0] > dealerScore[0] then console.log('player wins')
+  #   else if playerScore[0] == dealerScore[0] then console.log('push')
+  #   else console.log('dealer win')
 
   render: ->
     @$el.children().detach()
